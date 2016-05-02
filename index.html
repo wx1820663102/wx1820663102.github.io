@@ -202,7 +202,7 @@
   
     <div class="article-meta">
       <a href="/2016/04/30/hexo-install/" class="article-date">
-  	<time datetime="2016-04-30T07:35:07.000Z" itemprop="datePublished">2016-04-30</time>
+  	<time datetime="2016-04-30T07:35:07.719Z" itemprop="datePublished">2016-04-30</time>
 </a>
     </div>
   
@@ -211,9 +211,26 @@
       <input type="hidden" class="isFancy" />
     
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/04/30/hexo-install/">hexo博客搭建过程中踩过的坑</a>
+    </h1>
+  
+
+      </header>
+      
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>先去学习下markdown语法</p>
+        <ol>
+<li><p><strong>hexo常用命令</strong>  </p>
+<figure class="highlight plain"><figcaption><span>install hexo -g```	全局安装hexo  </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">```npm update hexo -g```	升级  </span><br><span class="line">```hexo init```	初始化  </span><br><span class="line">```hexo n &quot;博客名称&quot;```==```hexo new &quot;博客名称&quot;```	新建博客  </span><br><span class="line">```hexo p```==```hexo publish```  </span><br><span class="line">```hexo g```==```hexo generate```	生成  </span><br><span class="line">```hexo s```==```hexo server```	本地启动预览（默认4000端口）  </span><br><span class="line">```hexo d```=```hexo deploy```	部署</span><br><span class="line">2. **hexo搭建中的坑**  </span><br><span class="line">修改_config.yml配置文件时，主要修改deploy部分。  </span><br><span class="line">其中type应为git，填github会报错。  </span><br><span class="line">repository应为[https：//github.com/yourname/yourname.github.io.git]()。  </span><br><span class="line">branch应为master。  </span><br><span class="line">示例如下：  </span><br><span class="line">```deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/wx1820663102/wx1820663102.github.io.git  </span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>markdown好难用<br>先去学markdown怎么写了，排版好丑啊，就我自己看，先忍忍。</p>
+</li>
+</ol>
 
       
     </div>
