@@ -77,7 +77,7 @@
 						<li>Links</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -224,7 +224,95 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本次主要介绍几种网页图片布局方式，包括拼图布局，瀑布流，木桶布局的重点。</p>
+        <p>本次主要介绍几种网页图片布局方式，包括拼图布局，瀑布流，木桶布局的重点。  </p>
+<ol>
+<li><strong>拼图布局</strong><br>拼图布局要求根据图片数量来自动调整布局方式，示例如下：<br><a href="http://wx1820663102.github.io/my-task/task43/task43" title="拼图布局" target="_blank" rel="external">拼图布局</a><br>预览图：<img src="http://wx1820663102.github.io/my-task/task43/images/img1.jpg" alt="图炸啦"><br>布局核心代码介绍：<br> <pre>layout:function(count){<pre><code>    count=parseInt(count);
+    var self=this,
+        width=parseInt(this.width),
+        height=parseInt(this.height),
+        i;
+    //根据图片数量添加对应class
+    self.wrap.className +=  &apos; &apos; + self.prefix + &apos;-&apos; + count;
+    for(i=0;i&lt;self.imgList.length;i++){
+        var div=document.createElement(&apos;div&apos;);
+        div.className=&apos;imgCover&apos;;
+        div.style.backgroundImage = &apos;url(&apos; + self.imgList[i].src　+　&apos;)&apos;;
+        div.dataset.src=self.imgList[i].src;
+        div.dataset.alt=self.imgList[i].alt||&apos;&apos;;
+        div.appendChild(self.imgList[i]);
+        switch(count){
+            case 3:
+                switch(i){
+                    case 0:
+                        div.style.width=(width-(height/2))*100/width+&apos;%&apos;;
+                        break;
+                    case 1:
+                    case 2:
+                        div.style.width=(height/2)*100/width+&apos;%&apos;;
+                        break;
+                }
+                break;
+            case 5:
+                switch(i){
+                    case 0:
+                        div.style.width=(width*2/3)*100/width+&apos;%&apos;;
+                        break;
+                    case 1:
+                        div.style.height=(width/3)*100/height+&apos;%&apos;;
+                        break;
+                    case 2:
+                        div.style.height=(height-width/3)*100/height+&apos;%&apos;;
+                        break;
+                }
+                break;
+            default:break;
+        }
+        self.wrap.appendChild(div);
+    }
+}&lt;/pre&gt;
+</code></pre>根据count的值改变布局方式，其中两张图片布局用chrome浏览器才能看到正确效果。  </pre></li>
+<li><strong>瀑布流布局</strong><br>瀑布流布局中当浏览器的滚动条向下滑动时自动加载新的图片，使得网页图片向瀑布似一直流动，难点在判断何时加载以及图片加载的位置。示例如下:<br><a href="http://wx1820663102.github.io/my-task/task44/task44" target="_blank" rel="external">瀑布流布局</a><br>由于图片较大，首次加载较慢，请在火狐浏览器下查看，其他浏览器下图片会重叠。<br>下面介绍瀑布流布局核心代码<br>判断何时加载:  <pre><code>&lt;pre&gt;this.checkFlag=function(){
+var oparent=document.getElementById(&quot;main&quot;);
+var content=this.getChildElement(oparent,&quot;box&quot;);
+var lastContentHeight=content[content.length-1].offsetTop;
+var scrollHeight=document.documentElement.scrollTop||document.body.scrollTop;
+var pageHeight=document.documentElement.clientHeight||document.body.clientHeight;
+if(lastContentHeight&lt;scrollHeight+pageHeight){
+    return true;
+}
+</code></pre> }<br>获取行高最小的元素：<br> <pre>this.getMinIndex=function(heighArr,minHeight){<pre><code>for(var i=0;i&lt;heighArr.length;i++){
+    if(heighArr[i]==minHeight){
+        return i;
+    }
+}
+</code></pre> }</pre><br>加载图片：<br> <pre>this.imgLocation=function(parent,child){<pre><code>var oparent=document.getElementById(parent);
+var content=this.getChildElement(oparent,child);
+var imgwidth=content[0].offsetWidth;
+// var imgs=document.querySelectorAll(&quot;img&quot;);
+// for (var i=0;i&lt;imgs.length;i++){
+//     imgs[i].style.width=colsNum+&apos;px&apos;;
+// }
+// var imgwidth=colsNum;
+var cols=Math.floor(document.documentElement.clientWidth/imgwidth);
+oparent.style.cssText=&quot;width:&quot;+imgwidth*cols+&quot;px;margin: 30px auto&quot;;
+var heightArr=[];
+for(var i=0;i&lt;content.length;i++){
+    if(i&lt;cols){
+        heightArr.push(content[i].offsetHeight);
+    }
+    else{
+        var minHeight=Math.min.apply(null,heightArr);
+        var minIndex=this.getMinIndex(heightArr,minHeight);
+        content[i].style.position=&quot;absolute&quot;;
+        content[i].style.top=minHeight+&quot;px&quot;;
+        content[i].style.left=content[minIndex].offsetLeft+&quot;px&quot;;
+        heightArr[minIndex]+=content[i].offsetHeight;
+        console.log(heightArr)
+    }
+}
+</code></pre> }</pre><br>完整代码如下：<br><a href="https://github.com/wx1820663102/my-task/blob/gh-pages/task44/script/WaterFall-layout.js" title="瀑布流核心js代码" target="_blank" rel="external">瀑布流核心js代码</a>  </li>
+<li><strong>木桶布局</strong><br>我们在一些摄影网站（如 500px、flickr 等）有时会看到如下图的布局，每张图片的占位长宽比和图片本身的长宽比是一致的；每一行的高度是不固定的，但是要尽可能接近；每行的图片数也是不同的，在一定范围内通过控制图片是否加入当前行，保证行高尽可能接近。这里我们方便起见给这种布局起名叫“木桶布局”，因为它和木桶一样，不在乎你放多少块木头，以及不同圈的木头高度是否一致，只要每圈都把桶围成同样宽度。<br>木桶布局的难点在如何确定图片是否换行，实现思路为：首先，定义一个最小行高，然后根据当前容器长度计算长宽比，得到Ratio，新加入的图片分别依次计算长宽比，并累加，一旦累加的长宽比大于Ratio，则之前累加的图片作为一行。<br>木桶布局示例：  <a href="http://wx1820663102.github.io/my-task/task45/task45" target="_blank" rel="external">木桶布局</a><br>js源码：<a href="https://github.com/wx1820663102/my-task/blob/gh-pages/task45/script/barrel_layout.js" target="_blank" rel="external">barrel_layout.js</a> </li>
+</ol>
 
       
     </div>
